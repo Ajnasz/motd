@@ -13,10 +13,13 @@ Based on https://github.com/RIKRUS/MOTD
 
 ## Installation
 
+Copy the scripts to the /etc/update-motd.d/ folder.
+
 ```sh
 rsync -avz * --exclude README remote-server.com:tmp/motd/
 ssh remote-server.com
-sudo cp 40-services 30-hdd-free 20-sysinfo /etc/update-motd.d
+cd downloads/motd
+sudo cp * /etc/update-motd.d/
 ```
 
 ## Configuration
