@@ -16,7 +16,7 @@ Based on https://github.com/RIKRUS/MOTD
 Copy the scripts to the /etc/update-motd.d/ folder.
 
 ```sh
-rsync -avz * --exclude README remote-server.com:tmp/motd/
+rsync -avz * --exclude README.md --exclude LICENSE remote-server.com:tmp/motd/
 ssh remote-server.com
 cd downloads/motd
 sudo cp * /etc/update-motd.d/
