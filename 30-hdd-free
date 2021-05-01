@@ -1,0 +1,31 @@
+#!/bin/sh
+
+barWidth=34
+maxDiscUsage=90
+clear="\e[39m\e[0m"
+dim="\e[2m"
+echo
+echo 'HDD free:'
+for point in $(lsblk -l -p | awk 'NR >1 && substr($7, 1, 1) == "/" && $7 !~ /devicemapper/ { print $1 }'); do
+    line=$(df -hl "${point}")
+    label=$(lsblk -o mountpoint "${point}")
+    usagePercent=$(echo "$line" | tail -n1 | awk '{print $5}' | sed 's/%//')
+    usedBarWidth=$(((usagePercent*barWidth)/100))
+    barContent=""
+    color="\e[33m"
+    if [ "${usagePercent}" -ge "${maxDiscUsage}" ]; then
+        color="\e[31m"
+    fi
+    barContent="${color}"
+    for _ in $(seq 1 $usedBarWidth); do
+        barContent="${barContent}|"
+    done
+    barContent="${barContent}${clear}${dim}"
+    for _ in $(seq 1 $((barWidth-usedBarWidth))); do
+        barContent="${barContent}-"
+    done
+    bar="[${barContent}${clear}]"
+    echo "${label}" | awk '$1 != "MOUNTPOINT" { printf("%-10s", $1); }'
+    echo "${line}" | awk  '$1 != "Filesystem" { printf("%+8s used out of %+5s\n", $3, $2); }'
+    echo "${bar}"
+done
