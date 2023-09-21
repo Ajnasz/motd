@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for t in /sys/class/thermal/thermal_zone*
+do
+	echo $(cat $t/type | sed 's/-thermal$//') $(cat $t/temp | sed 's/\(.\)..$/.\1°C/');
+done
+
+#vi: set ft=sh
